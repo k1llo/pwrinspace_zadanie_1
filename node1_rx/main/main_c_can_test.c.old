@@ -1,0 +1,46 @@
+#include <stdio.h>
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+#include "driver/twai.h"
+#include "esp_log.h"
+
+static const char *TAG = "CAN_RX";
+
+#define TX_PIN 26
+#define RX_PIN 25
+
+void app_main(void)
+{
+    twai_general_config_t g_config = TWAI_GENERAL_CONFIG_DEFAULT(TX_PIN, RX_PIN, TWAI_MODE_NORMAL);
+    twai_timing_config_t t_config = TWAI_TIMING_CONFIG_500KBITS();
+    twai_filter_config_t f_config = TWAI_FILTER_CONFIG_ACCEPT_ALL();
+
+    if (twai_driver_install(&g_config, &t_config, &f_config) == ESP_OK) {
+        ESP_LOGI(TAG, "Driver installed");
+    } else {
+        ESP_LOGE(TAG, "Failed to install driver");
+        return;
+    }
+    if (twai_start() == ESP_OK) {
+        ESP_LOGI(TAG, "Driver started");
+    } else {
+        ESP_LOGE(TAG, "Failed to start driver");
+        return;
+    }
+
+    while (1) {
+        twai_message_t message;
+        if (twai_receive(&message, pdMS_TO_TICKS(10000)) == ESP_OK) {
+            if (!(message.rtr)) {
+                uint32_t received_val = (message.data[0] << 24) | 
+                                        (message.data[1] << 16) | 
+                                        (message.data[2] << 8)  | 
+                                        message.data[3];
+                                        
+                ESP_LOGI(TAG, "Received ID: 0x%lX, Data: %lu", message.identifier, received_val);
+            }
+        } else {
+            ESP_LOGW(TAG, "No messages");
+        }
+    }
+}

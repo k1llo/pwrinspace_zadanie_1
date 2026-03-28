@@ -1,0 +1,10 @@
+{
+	"folders": [
+		{
+			"path": "node1_rx"
+		},
+		{
+			"path": "node2_tx"
+		}
+	]
+}

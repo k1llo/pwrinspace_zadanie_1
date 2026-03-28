@@ -49,6 +49,9 @@ Składa się z 5 stanów: **STATE_IDLE**, **STATE_BOOST**, **STATE_COAST**, **ST
 W zależności od tego, w jakim stanie znajduje się rakieta, wysyłane są różne dane, takie jak: _timestamp_, _packet_id_, _chamber_pressure_, _tank_pressure_, _accel_z_, _altitude_.
 Ogólnie symulacja lotu wygląda następująco:
 
+<img width="1200" height="243" alt="image" src="https://github.com/user-attachments/assets/81495942-7bec-4bd7-9851-9adaf259e5e3" />
+
+
 <img width="1000" height="1200" alt="wykres" src="https://github.com/user-attachments/assets/5b6f5c0d-2d54-44dc-bffa-b3666ff2bd0f" />
 
 
